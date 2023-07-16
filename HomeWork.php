@@ -1,5 +1,25 @@
 <?php
 // HomeworkModule.php
+namespace Gibbon\Module\Homework\Tables;
+
+use Gibbon\Core;
+
+class HomeworkTable extends Core
+{
+    protected $tableName = 'gibbonPlannerEntryHomework';
+
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
+
+    public function insert($data)
+    {
+        // TODO: Validate data before inserting.
+        return $this->db->insert($this->tableName, $data);
+    }
+}
+
 class HomeworkModule extends Module {
     // Implement the necessary methods and functionality for the module
 }

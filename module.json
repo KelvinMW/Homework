@@ -1,0 +1,9 @@
+{
+    "name": "Homework",
+    "version": "1.0",
+    "author": "Your Name",
+    "description": "A module for posting homework assignments",
+    "dependencies": {
+        "gibbon": ">=20.0"
+    }
+}

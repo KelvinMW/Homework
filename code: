@@ -1,0 +1,24 @@
+class HomeworkManager {
+    private $pdo;
+
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
+
+    public function createHomeworkAssignment($assignment) {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO gibbonPlannerHomework (subject, dueDate, description, instructions, classID)
+            VALUES (:subject, :dueDate, :description, :instructions, :classID)
+        ");
+
+        $stmt->bindValue(':subject', $assignment->subject, PDO::PARAM_STR);
+        $stmt->bindValue(':dueDate', $assignment->dueDate, PDO::PARAM_STR);
+        $stmt->bindValue(':description', $assignment->description, PDO::PARAM_STR);
+        $stmt->bindValue(':instructions', $assignment->instructions, PDO::PARAM_STR);
+        $stmt->bindValue(':classID', $assignment->classID, PDO::PARAM_INT);
+
+        $stmt->execute();
+    }
+
+    // TODO: Implement the remaining methods
+}

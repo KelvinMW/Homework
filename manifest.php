@@ -26,24 +26,25 @@ $entryURL    = "Homework_GET.php";   // The landing page for the unit, used in t
 $type        = "Additional";  // Do not change.
 $category    = 'Learn';            // The main menu area to place the module in
 $version     = '00.0.03';            // Version number
-$author      = 'Kelvin Maina';            // Your name
+$author      = 'Kelvin';            // Your name
 $url         = 'https://github.com/KelvinMW/';            // Your URL
 
-// Module tables & gibbonSettings entries
-$moduleTables[] = ''; // One array entry for every database table you need to create. Might be nice to preface the table name with the module name, to keep the db neat. 
-$moduleTables[] = ''; // Also can be used to put data into gibbonSettings. Other sql can be run, but resulting data will not be cleaned up on uninstall.
 
 // Add gibbonSettings entries
-$gibbonSetting[] = "INSERT INTO `gibbonSetting` (`gibbonSettingID`, `scope`, `name`, `nameDisplay`, `description`, `value`)
-VALUES
+$moduleTables[] = "INSERT INTO `gibbonSetting` (`gibbonSettingID`, `scope`, `name`, `nameDisplay`, `description`, `value`)
+    VALUES
     (NULL, 'Homework', 'Homework', 'Homework', 'Post homework', '')";
+// Module tables & gibbonSettings entries
+//$moduleTables[] = ''; // One array entry for every database table you need to create. Might be nice to preface the table name with the module name, to keep the db neat. 
+//$moduleTables[] = ''; // Also can be used to put data into gibbonSettings. Other sql can be run, but resulting data will not be cleaned up on uninstall.
+
 // Action rows 
 // One array per action
 $actionRows[] = [
     'name'                      => 'Homework', // The name of the action (appears to user in the right hand side module menu)
     'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
     'category'                  => 'Homework', // Optional: subgroups for the right hand side module menu
-    'description'               => '', // Text description
+    'description'               => 'Allows recording of homework and other assignments', // Text description
     'URLList'                   => 'Homework_GET.php', // List of pages included in this action
     'entryURL'                  => 'Homework_GET.php', // The landing action for the page.
     'entrySidebar'              => 'Y', // Whether or not there's a sidebar on entry to the action
@@ -54,10 +55,10 @@ $actionRows[] = [
     'defaultPermissionParent'   => 'N', // Default permission for built in role Parent
     'defaultPermissionSupport'  => 'Y', // Default permission for built in role Support
     'categoryPermissionStaff'   => 'Y', // Should this action be available to user roles in the Staff category?
-    'categoryPermissionStudent' => 'Y', // Should this action be available to user roles in the Student category?
-    'categoryPermissionParent'  => 'Y', // Should this action be available to user roles in the Parent category?
+    'categoryPermissionStudent' => 'N', // Should this action be available to user roles in the Student category?
+    'categoryPermissionParent'  => 'N', // Should this action be available to user roles in the Parent category?
     'categoryPermissionOther'   => 'Y', // Should this action be available to user roles in the Other category?
 ];
 
 // Hooks
-$hooks[] = ''; // Serialised array to create hook and set options. See Hooks documentation online.
+//$hooks[] = ''; // Serialised array to create hook and set options. See Hooks documentation online.

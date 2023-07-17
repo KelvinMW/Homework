@@ -4,7 +4,7 @@ use Gibbon\Contracts\Services\Session;
 use Gibbon\Contracts\Database\Connection;
 use Gibbon\Forms\CustomFieldHandler;
 use Gibbon\Module\ExamAnalysis\Forms\BindValues;
-use Gibbon\Module\Homework\
+use Gibbon\Module\Homework\Tables\HomeworkData;
 use Gibbon\Forms\DatabaseFormFactory;
 use Gibbon\Domain\School\FacilityGateway;
 use Gibbon\Domain\Timetable\CourseGateway;
@@ -20,16 +20,17 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Gibbon\Forms\Input\Button;
 use Gibbon\Forms\Input\Input;
 $settingGateway = $container->get(SettingGateway::class);
-$attainmentAlternativeName = $settingGateway->getSettingByScope('Markbook', 'attainmentAlternativeName');
-$effortAlternativeName = $settingGateway->getSettingByScope('Markbook', 'effortAlternativeName');
+$session = $container->get('session');
+$gibbon->session = $session;
+$container->share(\Gibbon\Contracts\Services\Session::class, $session);
 
-if (isActionAccessible($guid, $connection2, '/modules/Exam Analysis/analysis_view.php') == false){
+if (isActionAccessible($guid, $connection2, '/modules/Homework/HomeworkView.php') == false){
     $page->addError(__('You do not have access to this action.'));
 }
 else
 
 {
-
+//$homeworkData = $container->get(HomeworkData::class);
 $homeworkData = new \Gibbon\Module\Homework\Tables\HomeworkData($pdo);
 
 if ($_POST) {

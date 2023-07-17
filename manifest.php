@@ -41,8 +41,8 @@ $moduleTables[] = "INSERT INTO `gibbonSetting` (`gibbonSettingID`, `scope`, `nam
 // Action rows 
 // One array per action
 $actionRows[] = [
-    'name'                      => 'Homework', // The name of the action (appears to user in the right hand side module menu)
-    'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
+    'name'                      => 'Submit Homework', // The name of the action (appears to user in the right hand side module menu)
+    'precedence'                => '1',// If it is a grouped action, the precedence controls which is highest action in group
     'category'                  => 'Homework', // Optional: subgroups for the right hand side module menu
     'description'               => 'Allows recording of homework and other assignments', // Text description
     'URLList'                   => 'Homework_GET.php', // List of pages included in this action
@@ -59,6 +59,43 @@ $actionRows[] = [
     'categoryPermissionParent'  => 'N', // Should this action be available to user roles in the Parent category?
     'categoryPermissionOther'   => 'Y', // Should this action be available to user roles in the Other category?
 ];
-
+$actionRows[] = [
+    'name'                      => 'Homework Statistics', // The name of the action (appears to user in the right hand side module menu)
+    'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
+    'category'                  => 'Homework', // Optional: subgroups for the right hand side module menu
+    'description'               => 'Allows visual overview of homework', // Text description
+    'URLList'                   => 'HomeworkView.php', // List of pages included in this action
+    'entryURL'                  => 'HomeworkView.php', // The landing action for the page.
+    'entrySidebar'              => 'Y', // Whether or not there's a sidebar on entry to the action
+    'menuShow'                  => 'Y', // Whether or not this action shows up in menus or if it's hidden
+    'defaultPermissionAdmin'    => 'Y', // Default permission for built in role Admin
+    'defaultPermissionTeacher'  => 'Y', // Default permission for built in role Teacher
+    'defaultPermissionStudent'  => 'N', // Default permission for built in role Student
+    'defaultPermissionParent'   => 'N', // Default permission for built in role Parent
+    'defaultPermissionSupport'  => 'Y', // Default permission for built in role Support
+    'categoryPermissionStaff'   => 'Y', // Should this action be available to user roles in the Staff category?
+    'categoryPermissionStudent' => 'N', // Should this action be available to user roles in the Student category?
+    'categoryPermissionParent'  => 'N', // Should this action be available to user roles in the Parent category?
+    'categoryPermissionOther'   => 'Y', // Should this action be available to user roles in the Other category?
+];
+$actionRows[] = [
+    'name'                      => ' ', // The name of the action (appears to user in the right hand side module menu)
+    'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
+    'category'                  => '', // Optional: subgroups for the right hand side module menu
+    'description'               => 'successful post', // Text description
+    'URLList'                   => 'Homework_POST.php', // List of pages included in this action
+    'entryURL'                  => 'Homework_POST.php', // The landing action for the page.
+    'entrySidebar'              => 'N', // Whether or not there's a sidebar on entry to the action
+    'menuShow'                  => 'N', // Whether or not this action shows up in menus or if it's hidden
+    'defaultPermissionAdmin'    => 'Y', // Default permission for built in role Admin
+    'defaultPermissionTeacher'  => 'Y', // Default permission for built in role Teacher
+    'defaultPermissionStudent'  => 'N', // Default permission for built in role Student
+    'defaultPermissionParent'   => 'N', // Default permission for built in role Parent
+    'defaultPermissionSupport'  => 'Y', // Default permission for built in role Support
+    'categoryPermissionStaff'   => 'Y', // Should this action be available to user roles in the Staff category?
+    'categoryPermissionStudent' => 'N', // Should this action be available to user roles in the Student category?
+    'categoryPermissionParent'  => 'N', // Should this action be available to user roles in the Parent category?
+    'categoryPermissionOther'   => 'Y', // Should this action be available to user roles in the Other category?
+];
 // Hooks
 //$hooks[] = ''; // Serialised array to create hook and set options. See Hooks documentation online.

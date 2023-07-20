@@ -19,6 +19,10 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Gibbon\Forms\Input\Button;
 use Gibbon\Forms\Input\Input;
+
+//require_once '../../gibbon.php';
+require_once __DIR__ . '/../../gibbon.php';
+
 $settingGateway = $container->get(SettingGateway::class);
 $session = $container->get('session');
 $gibbon->session = $session;
@@ -30,31 +34,41 @@ if (isActionAccessible($guid, $connection2, '/modules/Homework/HomeworkView.php'
 else
 
 {
+//$homeworkData = new HomeworkData($gibbon->sqlConnection);
 //$homeworkData = $container->get(HomeworkData::class);
 $homeworkData = new \Gibbon\Module\Homework\Tables\HomeworkData($pdo);
-
+//$homeworkData = new HomeworkData($gibbon->session->get('database'));
+//$endDate = date('Y-m-d');
+//$startDate = date('Y-m-d', strtotime($endDate . ' -5 days'));
 if ($_POST) {
     $startDate = $_POST['startDate'];
     $endDate = $_POST['endDate'];
     $data = $homeworkData->getHomeworkData($startDate, $endDate);
+    if(empty($data)){
+        $data = [];
+    }
 } else {
-    $data = [];
+    $endDate = date('Y-m-d');
+    $startDate = date('Y-m-d', strtotime($endDate . ' -5 days'));
+    $data = $homeworkData->getHomeworkData($startDate, $endDate);
+    if(empty($data)){
+        $data = [];
+    }
 }
-
-echo "
-<form action='HomeworkView.php' method='post'>
-    <input type='date' name='startDate'>
-    <input type='date' name='endDate'>
-    <input type='submit' value='Filter'>
+echo "<form action='HomeworkView.php' method='post'>
+<input type='date' name='startDate' value = $startDate>
+<input type='date' name='endDate' value = $endDate>
+<input type='submit' value='Filter'>
 </form>
-";
+<br>
+<br>
+<canvas id='homeworkChart'></canvas>";
 
 foreach ($data as $homework) {
     echo "<p>{$homework['homeworkName']} by {$homework['preferredName']}</p>";
 }
 }
 ?>
-<canvas id="homeworkChart"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

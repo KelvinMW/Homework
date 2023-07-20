@@ -23,6 +23,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Gibbon\Forms\Input\Button;
 use Gibbon\Forms\Input\Input;
+use Gibbon\Domain\Planner\PlannerEntryGateway;
+use Gibbon\Module\Planner\Forms\PlannerFormFactory;
+
 $session = $container->get('session');
 $gibbon->session = $session;
 $container->share(\Gibbon\Contracts\Services\Session::class, $session);
@@ -45,6 +48,8 @@ else
 // Module includes
 $moduleName = $session->get('module');
 require_once __DIR__ . '/moduleFunctions.php';
+$_POST = $container->get(Validator::class)->sanitize($_POST, ['homeworkDetails' => 'HTML']);
+
   // School Year Info
   $settingGateway = $container->get(SettingGateway::class);
   $attainmentAlternativeName = $settingGateway->getSettingByScope('Markbook', 'attainmentAlternativeName');
@@ -52,8 +57,9 @@ require_once __DIR__ . '/moduleFunctions.php';
 
  $gibbonSchoolYearID = $_GET['gibbonSchoolYearID'] ?? $session->get('gibbonSchoolYearID');
  $gibbonCourseID = $_GET['gibbonCourseID'] ?? null;
-
-
+ $plannerGateway = $container->get(PlannerEntryGateway::class);
+ $homeworkNameSingular = $settingGateway->getSettingByScope('Planner', 'homeworkNameSingular');
+ $homeworkNamePlural = $settingGateway->getSettingByScope('Planner', 'homeworkNamePlural');
 //echo "
 //<form action='Homework_POST.php' method='post'>
 //    <input type='text' name='value1' placeholder='Homework details'>
@@ -98,6 +104,7 @@ $sql = "SELECT gibbonCourseClass.gibbonCourseClassID as value, CONCAT(gibbonCour
                 $row->addLabel('homeworkTimeCap', __('Time Cap?'))->description(__('The maximum time, in minutes, for students to work on this.'));
                 $row->addNumber('homeworkTimeCap');
 
+                $description = $settingGateway->getSettingByScope('Planner', 'lessonDetailsTemplate');
             $row = $form->addRow()->addClass('homework');
                 $column = $row->addColumn();
                 $column->addLabel('homeworkDetails', __('{homeworkName} Details', ['homeworkName' => __($homeworkNameSingular)]));

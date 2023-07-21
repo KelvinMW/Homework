@@ -50,23 +50,54 @@ if ($_POST) {
 } else {
     $endDate = date('Y-m-d');
     $startDate = date('Y-m-d', strtotime($endDate . ' -5 days'));
-    $data = $homeworkData->getHomeworkData($startDate, $endDate);
-    if(empty($data)){
-        $data = [];
-    }
 }
-echo "<form action='HomeworkView.php' method='post'>
+$form = Form::create('HomeworkStatistics', $session->get('absoluteURL').'/index.php?q=/modules/Homework/HomeworkView.php');
+
+$form->addHiddenValue('address', $session->get('address'));
+
+$row = $form->addRow();
+    $row->addLabel('startDate', __('Start Date'));
+    $row->addDate('startDate')->setValue(Format::date($startDate))->required();
+
+$row = $form->addRow();
+    $row->addLabel('endDate', __('End Date'));
+    $row->addDate('endDate')->setValue(Format::date($endDate))->required();
+//$sql = "SELECT gibbonYearGroup.name as value, name FROM gibbonYearGroup ORDER BY sequenceNumber";
+//$row = $form->addRow();
+//    $row->addLabel('gibbonYearGroupID', __('Year Group'));
+//    $row->addSelect('gibbonYearGroupID')->fromArray(array('all' => __('All')))->fromQuery($pdo, $sql)->selectMultiple()->selected($yearGroups);
+$form->addRow()->addSubmit();
+echo $form->getOutput();
+
+$data = $homeworkData->getHomeworkData($startDate, $endDate);
+$post = $homeworkData->getHomeworkDataPosts($startDate, $endDate);
+if(empty($data)){
+    $data = [];
+}
+/*echo "<form action='HomeworkView.php' method='post'>
 <input type='date' name='startDate' value = $startDate>
 <input type='date' name='endDate' value = $endDate>
 <input type='submit' value='Filter'>
 </form>
 <br>
 <br>
-<canvas id='homeworkChart'></canvas>";
-
-foreach ($data as $homework) {
-    echo "<p>{$homework['homeworkName']} by {$homework['preferredName']}</p>";
-}
+*/
+echo "<canvas id='homeworkChart'></canvas>";
+    // DATA TABLE
+    $table = DataTable::create('Homework');
+    $table->setTitle(__('Posted Homework'));
+    $table->addColumn('preferredName', __('Teacher'))->sortable();
+    $table->addColumn('class', __('Class'))
+          ->sortable()
+          ->format(Format::using('courseClassName', ['CourseName', 'class']));
+//    $table->addColumn('CourseName', __('Course'));
+//    $table->addColumn('class', __('Class'));
+    $table->addColumn('homeworkDetails', __('homework Details'));
+    $table->addColumn('date', __('Date Posted'))->sortable();
+//foreach ($data as $homework) {
+//    $row->"<p>{$homework['gibbonCourse.name']}.{$homework['gibbonCourseClass.name']} {$homework['homeworkDetails']} by <b>{$homework['title']} {$homework['preferredName']}</b> on {$homework['date']}<p>";
+//}
+echo $table->render($post);
 }
 ?>
 
@@ -74,7 +105,6 @@ foreach ($data as $homework) {
 <script>
 let dates = <?php echo json_encode(array_column($data, 'date')); ?>;
 let counts = dates.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), {});
-
 new Chart(document.getElementById('homeworkChart'), {
     type: 'line',
     data: {

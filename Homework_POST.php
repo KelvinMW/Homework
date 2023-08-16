@@ -314,7 +314,6 @@ else
     }
 }
 }
-}
 //$homeworkData = $_POST;
 //$module = new \Gibbon\Module\Homework\Module($gibbon, $pdo);
 

@@ -33,16 +33,6 @@ require_once '../../gibbon.php';
 $_POST = $container->get(Validator::class)->sanitize($_POST, ['description' => 'HTML', 'teacherNotes' => 'HTML', 'homeworkDetails' => 'HTML', 'contents*' => 'HTML', 'teachersNotes*' => 'HTML']);
 $URL = $session->get('absoluteURL').'/index.php?q=/modules/Homework/Homework_GET.php';
 
-//$absoluteURL = $session->get('absoluteURL');
-//$moduleName = $session->get('module');
-//$session = $container->get('session');
-//$gibbon->session = $session;
-//$container->share(\Gibbon\Contracts\Services\Session::class, $session);
-//$absoluteURL = $session->get('absoluteURL');
-//$moduleName = $session->get('module');
-//$URL = $absoluteURL . '/index.php?q=/modules/' . $moduleName;
-//$container->share(\Gibbon\Contracts\Services\Session::class, $session);
-
 if (!isActionAccessible($guid, $connection2, '/modules/Homework/homework_POST.php')){
     echo'You do not have access to this action.';
 }
@@ -182,21 +172,16 @@ else
     $date = date('Y-m-d');
     $gibbonPersonIDCreator = $session->get('gibbonPersonID');
     $gibbonPersonIDLastEdit = $session->get('gibbonPersonID');
-    //Params to pass back (viewBy + date or classID)
-//    if ($viewBy == 'date') {
-//        $params = "&viewBy=$viewBy&date=$date";
-//    } else {
-//        $params = "&viewBy=$viewBy&gibbonCourseClassID=$gibbonCourseClassID&subView=$subView";
- //   }
+ 
 
     // CUSTOM FIELDS
     $customRequireFail = false;
     $fields = $container->get(CustomFieldHandler::class)->getFieldDataFromPOST('Lesson Plan', [], $customRequireFail);
     $customRequireFail = false;
     $fields = $container->get(CustomFieldHandler::class)->getFieldDataFromPOST('Lesson Plan', [], $customRequireFail);
-    
+
     if ($gibbonCourseClassID == '' or $homework == '' or $viewableParents == '' or $viewableStudents == '' or ($homework == 'Y' and ($homeworkDetails == '' or $homeworkDueDate == ''))) {
-        $URL .= "&return=error1$params";
+        $URL .= "&return=error1";
         header("Location: {$URL}");
         exit();
     } else {
@@ -204,22 +189,22 @@ else
 
         //Write to database
         try {
-            $classes==$_POST['gibbonCourseClassID'];
+            $classes=$_POST['gibbonCourseClassID'];
             foreach($classes as $class){
-            $gibbonCourseClassID=$class;
+            $gibbonCourseClassID=$class;                
             $data = array('gibbonCourseClassID' => $gibbonCourseClassID, 'date' => $date, 'timeStart' => $timeStart, 'timeEnd' => $timeEnd, 'gibbonUnitID' => $gibbonUnitID, 'name' => $name, 'summary' => $summary, 'description' => $description, 'teachersNotes' => $teachersNotes, 'homework' => $homework, 'homeworkDueDate' => $homeworkDueDate, 'homeworkDetails' => $homeworkDetails, 'homeworkTimeCap' => $homeworkTimeCap, 'homeworkLocation' => $homeworkLocation, 'homeworkSubmission' => $homeworkSubmission, 'homeworkSubmissionDateOpen' => $homeworkSubmissionDateOpen, 'homeworkSubmissionDrafts' => $homeworkSubmissionDrafts, 'homeworkSubmissionType' => $homeworkSubmissionType, 'homeworkSubmissionRequired' => $homeworkSubmissionRequired, 'homeworkCrowdAssess' => $homeworkCrowdAssess, 'homeworkCrowdAssessOtherTeachersRead' => $homeworkCrowdAssessOtherTeachersRead, 'homeworkCrowdAssessClassmatesRead' => $homeworkCrowdAssessClassmatesRead, 'homeworkCrowdAssessOtherStudentsRead' => $homeworkCrowdAssessOtherStudentsRead, 'homeworkCrowdAssessSubmitterParentsRead' => $homeworkCrowdAssessSubmitterParentsRead, 'homeworkCrowdAssessClassmatesParentsRead' => $homeworkCrowdAssessClassmatesParentsRead, 'homeworkCrowdAssessOtherParentsRead' => $homeworkCrowdAssessOtherParentsRead, 'viewableParents' => $viewableParents, 'viewableStudents' => $viewableStudents, 'gibbonPersonIDCreator' => $gibbonPersonIDCreator, 'gibbonPersonIDLastEdit' => $gibbonPersonIDLastEdit, 'fields' => $fields);
             $sql = 'INSERT INTO gibbonPlannerEntry SET gibbonCourseClassID=:gibbonCourseClassID, date=:date, timeStart=:timeStart, timeEnd=:timeEnd, gibbonUnitID=:gibbonUnitID, name=:name, summary=:summary, description=:description, teachersNotes=:teachersNotes, homework=:homework, homeworkDueDateTime=:homeworkDueDate, homeworkDetails=:homeworkDetails, homeworkTimeCap=:homeworkTimeCap, homeworkLocation=:homeworkLocation, homeworkSubmission=:homeworkSubmission, homeworkSubmissionDateOpen=:homeworkSubmissionDateOpen, homeworkSubmissionDrafts=:homeworkSubmissionDrafts, homeworkSubmissionType=:homeworkSubmissionType, homeworkSubmissionRequired=:homeworkSubmissionRequired, homeworkCrowdAssess=:homeworkCrowdAssess, homeworkCrowdAssessOtherTeachersRead=:homeworkCrowdAssessOtherTeachersRead, homeworkCrowdAssessClassmatesRead=:homeworkCrowdAssessClassmatesRead, homeworkCrowdAssessOtherStudentsRead=:homeworkCrowdAssessOtherStudentsRead, homeworkCrowdAssessSubmitterParentsRead=:homeworkCrowdAssessSubmitterParentsRead, homeworkCrowdAssessClassmatesParentsRead=:homeworkCrowdAssessClassmatesParentsRead, homeworkCrowdAssessOtherParentsRead=:homeworkCrowdAssessOtherParentsRead, viewableParents=:viewableParents, viewableStudents=:viewableStudents, gibbonPersonIDCreator=:gibbonPersonIDCreator, gibbonPersonIDLastEdit=:gibbonPersonIDLastEdit, fields=:fields';
             $result = $connection2->prepare($sql);
             $result->execute($data);
+            
         }
         } catch (PDOException $e) {
-            $URL .= "&return=error2$params";
+            $URL .= "&return=error2";
             header("Location: {$URL}");
             exit();
         }
 
         $AI = $connection2->lastInsertID();
-
         //Scan through guests
         $guests = $_POST['guests'] ?? [];
 
@@ -314,13 +299,3 @@ else
     }
 }
 }
-//$homeworkData = $_POST;
-//$module = new \Gibbon\Module\Homework\Module($gibbon, $pdo);
-
-//$result = $module->postHomework($homeworkData);
-
-//if ($result) {
-//    echo "Homework posted successfully!";
-//} else {
-//    echo "Failed to post homework.";
-//}
